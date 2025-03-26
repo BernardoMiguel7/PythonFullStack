@@ -1,0 +1,52 @@
+class Hotel {
+    constructor(Nome, Endereco, Cidade, quartosDisponiveis) {
+        this.nome = Nome;
+        this.endereco = Endereco;
+        this.cidade = Cidade;
+        this.quartosDisponiveis = quartosDisponiveis;
+    }
+
+    reservarQuarto(cliente) {
+        if (this.quartosDisponiveis.length === 0) {
+            console.log(`❌ Não há quartos disponíveis no ${this.nome}.`);
+            return;
+        }
+
+        let quartoReservado = this.quartosDisponiveis.shift(); // Remove o primeiro quarto da lista
+        cliente.HistoricoReservas.push(quartoReservado);
+
+        console.log(`✅ ${cliente.Nome2} reservou o quarto ${quartoReservado} no ${this.nome}.`);
+    }
+
+    cancelarReserva(cliente, numeroQuarto) {
+        let index = cliente.HistoricoReservas.indexOf(numeroQuarto);
+        if (index === -1) {
+            console.log(`⚠️ ${cliente.Nome2} não tem reserva no quarto ${numeroQuarto}.`);
+            return;
+        }
+
+        cliente.HistoricoReservas.splice(index, 1); // Remove do histórico do cliente
+        this.quartosDisponiveis.push(numeroQuarto); // Devolve o quarto para a lista
+
+        console.log(`❌ ${cliente.Nome2} cancelou a reserva do quarto ${numeroQuarto} no ${this.nome}.`);
+    }
+}
+
+class Cliente {
+    constructor(Nome2, CPF, HistoricoReservas = []) {
+        this.Nome2 = Nome2;
+        this.CPF = CPF;
+        this.HistoricoReservas = HistoricoReservas;
+    }
+}
+
+
+const hotel1 = new Hotel("Hotel Luxo", "Rua A, 123", "Cidade X", [101, 102, 103]);
+const cliente1 = new Cliente("Carlos", "123.456.789-00");
+
+
+hotel1.reservarQuarto(cliente1);
+hotel1.reservarQuarto(cliente1);
+
+
+hotel1.cancelarReserva(cliente1, 101);
